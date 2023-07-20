@@ -7,7 +7,7 @@ const List = () => {
 
   useEffect(() => {
     axios
-      .get('http://192.168.15.7:8000/api/items')
+      .get('http://192.168.15.7:5000/api/items')
       .then(response => {
         setData(response.data);
       })

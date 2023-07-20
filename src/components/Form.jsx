@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, TextInput, StyleSheet } from 'react-native';
+import { View, TextInput, StyleSheet, Text } from 'react-native';
 import Button from './Button';
 import axios from 'axios';
 
@@ -9,8 +9,14 @@ const Form = ({ onSave }) => {
   const [days, setDays] = useState('');
   const [event, setEvent] = useState('');
   const [observation, setObservation] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
 
   const handleSave = () => {
+    if (!name) {
+      setErrorMessage('O campo "Nome" é obrigatório.');
+      return;
+    }
+
     const item = {
       name,
       rg,
@@ -20,52 +26,74 @@ const Form = ({ onSave }) => {
     };
 
     axios
-    .post('http://192.168.15.7:8000/api/items', item)
-    .then(response => {
-      onSave(response.data);
-      setName('');
-      setRg('');
-      setDays('');
-      setEvent('');
-      setObservation('');
-    })
-    .catch(error => {
-      console.error('Erro ao salvar o item:', error);
-    });
-
+      .post('http://192.168.15.7:5000/api/items', item)
+      .then(response => {
+        if (response.data && response.data.id) {
+          onSave(response.data);
+          setName('');
+          setRg('');
+          setDays('');
+          setEvent('');
+          setObservation('');
+          setErrorMessage('');
+        } else {
+          console.error('Resposta inválida do servidor:', response.data);
+          setErrorMessage('Resposta inválida do servidor. Por favor, tente novamente mais tarde.');
+        }
+      })
+      .catch(error => {
+        console.error('Erro ao salvar o item:', error);
+        setErrorMessage('Erro ao salvar o item. Por favor, tente novamente mais tarde.');
+      });
   };
 
   return (
     <View style={styles.container}>
+      {errorMessage ? <Text style={styles.error}>{errorMessage}</Text> : null}
       <TextInput
         style={styles.input}
         placeholder="Nome"
         value={name}
-        onChangeText={text => setName(text)}
+        onChangeText={text => {
+          setName(text);
+          setErrorMessage('');
+        }}
       />
       <TextInput
         style={styles.input}
         placeholder="RG"
         value={rg}
-        onChangeText={text => setRg(text)}
+        onChangeText={text => {
+          setRg(text);
+          setErrorMessage('');
+        }}
       />
       <TextInput
         style={styles.input}
         placeholder="Dias"
         value={days}
-        onChangeText={text => setDays(text)}
+        onChangeText={text => {
+          setDays(text);
+          setErrorMessage('');
+        }}
       />
       <TextInput
         style={styles.input}
         placeholder="Evento"
         value={event}
-        onChangeText={text => setEvent(text)}
+        onChangeText={text => {
+          setEvent(text);
+          setErrorMessage('');
+        }}
       />
       <TextInput
         style={styles.input}
         placeholder="Observação"
         value={observation}
-        onChangeText={text => setObservation(text)}
+        onChangeText={text => {
+          setObservation(text);
+          setErrorMessage('');
+        }}
         multiline
       />
       <Button
@@ -101,6 +129,10 @@ const styles = StyleSheet.create({
     color: 'white',
     textAlign: 'center',
     fontWeight: 'bold',
+  },
+  error: {
+    color: 'red',
+    marginBottom: 10,
   },
 });
 
