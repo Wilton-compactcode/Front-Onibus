@@ -25,7 +25,7 @@ const Form = ({ onSave }) => {
       observation,
     };
 
-    axios.post('https://onibus-api.vercel.app/Onibus-api/items', item).then(response => {
+    axios.post('http://localhost:5000/api/items', item).then(response => {
         if (response.data && response.data.id) {
           onSave(response.data);
           setName('');
