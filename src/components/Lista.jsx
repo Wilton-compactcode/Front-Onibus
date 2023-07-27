@@ -1,9 +1,5 @@
 import React, { useState, useEffect } from 'react';
-<<<<<<< HEAD
 import { View, Text, FlatList, StyleSheet, TouchableOpacity, Modal, TextInput, Button } from 'react-native';
-=======
-import { View, Text, FlatList, StyleSheet, TouchableOpacity } from 'react-native';
->>>>>>> faf3cf726547082b77930b77b9eeb761d0d4d61e
 import axios from 'axios';
 
 const generateUniqueId = () => {
@@ -21,11 +17,7 @@ const List = () => {
 
   const fetchData = () => {
     axios
-<<<<<<< HEAD
       .get('http://192.168.15.7:5000/api/items')
-=======
-      .get('http://localhost:5000/api/items')
->>>>>>> faf3cf726547082b77930b77b9eeb761d0d4d61e
       .then(response => {
         setData(response.data);
       })
@@ -34,7 +26,6 @@ const List = () => {
       });
   };
 
-<<<<<<< HEAD
   const handleEditItem = (item) => {
     setEditingItem({ ...item, id: item.id }); // Copia todos os campos do item, incluindo o id
     setModalVisible(true);
@@ -45,50 +36,38 @@ const List = () => {
       .then(() => {
         console.log('Item deleted successfully');
         fetchData();
-=======
-  const handleEditItem = (itemId) => {
-    // Implement your edit logic here, e.g., navigation to the edit screen
-    console.log('Edit item with ID:', itemId);
-  };
-
-  const handleDeleteItem = (itemId) => {
-    // Implement your delete logic here, e.g., send a delete request to the API
-    axios.delete(`http://localhost:5000/api/items/${itemId}`)
-      .then(() => {
-        console.log('Item deleted successfully');
-        fetchData(); // Fetch updated data after deletion
->>>>>>> faf3cf726547082b77930b77b9eeb761d0d4d61e
       })
       .catch(error => {
         console.error('Erro ao deletar o item:', error);
       });
   };
 
-<<<<<<< HEAD
   const handleUpdateItem = () => {
+    // Prepare the updated data to send to the API
     const updatedData = {
-      name: editingItem.name.substring(0, 200),
-      rg: editingItem.rg.substring(0, 15),
-      days: editingItem.days.substring(0, 200),
-      event: editingItem.event.substring(0, 100),
-      observation: editingItem.observation.substring(0, 200),
+      id: editingItem.id, // Adicione o id do item na atualização
+      name: editingItem.name,
+      rg: editingItem.rg,
+      days: editingItem.days,
+      event: editingItem.event,
+      observation: editingItem.observation,
     };
-  
-    
+
+    // Send the PATCH request to update the item
     axios.patch(`http://192.168.15.7:5000/api/items/${editingItem.id}`, updatedData)
       .then(response => {
-        console.log('Item atualizado com sucesso:', response.data);
-  
-       
+        // Item updated successfully, response contains the updated item
+        console.log('Item updated successfully:', response.data);
+
+        // Fetch the updated data and close the modal
         fetchData();
         setModalVisible(false);
       })
       .catch(error => {
-        console.error('Erro ao atualizar o item:', error);
-        
+        console.error('Error updating the item:', error);
+        // Handle the error, e.g., show an error message to the user
       });
   };
-  
 
   const renderItem = ({ item }) => (
     <View key={item.id || generateUniqueId()} style={styles.item}>
@@ -102,30 +81,12 @@ const List = () => {
         onPress={() => handleEditItem(item)}
       >
         <Text style={styles.buttonText}>Edit</Text>
-=======
-  const renderItem = ({ item }) => (
-    <View style={styles.item}>
-      <Text>{item.name}</Text>
-      <Text>{item.rg}</Text>
-      <Text>{item.days}</Text>
-      <Text>{item.event}</Text>
-      <Text>{item.observation}</Text>
-      <TouchableOpacity
-        style={styles.button}
-        onPress={() => handleEditItem(item.id)}
-      >
-        <Text>Edit</Text>
->>>>>>> faf3cf726547082b77930b77b9eeb761d0d4d61e
       </TouchableOpacity>
       <TouchableOpacity
         style={styles.button}
         onPress={() => handleDeleteItem(item.id)}
       >
-<<<<<<< HEAD
         <Text style={styles.buttonText}>Delete</Text>
-=======
-        <Text>Delete</Text>
->>>>>>> faf3cf726547082b77930b77b9eeb761d0d4d61e
       </TouchableOpacity>
     </View>
   );
@@ -134,11 +95,7 @@ const List = () => {
     <View style={styles.container}>
       <FlatList
         data={data}
-<<<<<<< HEAD
         keyExtractor={(item, index) => item.id || generateUniqueId()}
-=======
-        keyExtractor={item => item.id.toString()}
->>>>>>> faf3cf726547082b77930b77b9eeb761d0d4d61e
         renderItem={renderItem}
       />
 
@@ -206,12 +163,9 @@ const styles = StyleSheet.create({
     marginVertical: 5,
     borderRadius: 5,
   },
-<<<<<<< HEAD
   text: {
     marginBottom: 5,
   },
-=======
->>>>>>> faf3cf726547082b77930b77b9eeb761d0d4d61e
   button: {
     marginTop: 5,
     backgroundColor: '#ccc',
@@ -220,7 +174,6 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     alignItems: 'center',
   },
-<<<<<<< HEAD
   buttonText: {
     fontWeight: 'bold',
   },
@@ -242,8 +195,6 @@ const styles = StyleSheet.create({
     padding: 5,
     marginBottom: 10,
   },
-=======
->>>>>>> faf3cf726547082b77930b77b9eeb761d0d4d61e
 });
 
 export default List;
