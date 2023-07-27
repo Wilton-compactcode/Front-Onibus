@@ -12,12 +12,6 @@ const Form = ({ onSave }) => {
   const [errorMessage, setErrorMessage] = useState('');
 
   const handleSave = () => {
-    // Verifica se o campo 'name' está preenchido
-    if (!name) {
-      setErrorMessage('O campo "Nome" é obrigatório.');
-      return;
-    }
-
     const item = {
       name,
       rg,
@@ -27,20 +21,19 @@ const Form = ({ onSave }) => {
     };
 
     axios
-      .post('http://192.168.15.7:5000/api/items', item)
-      .then(response => {
-        onSave(response.data);
-        setName('');
-        setRg('');
-        setDays('');
-        setEvent('');
-        setObservation('');
-        setErrorMessage(''); // Limpa a mensagem de erro em caso de sucesso
-      })
-      .catch(error => {
-        console.error('Erro ao salvar o item:', error);
-        setErrorMessage('Erro ao salvar o item. Tente novamente mais tarde.');
-      });
+    .post('http://192.168.15.7:8000/api/items', item)
+    .then(response => {
+      onSave(response.data);
+      setName('');
+      setRg('');
+      setDays('');
+      setEvent('');
+      setObservation('');
+    })
+    .catch(error => {
+      console.error('Erro ao salvar o item:', error);
+    });
+
   };
 
   return (
